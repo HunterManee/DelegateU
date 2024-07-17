@@ -1,0 +1,60 @@
+:root {
+    --form-margin: 6px;
+    --form-btn-margin-top: 6px;
+    --footer-margin-bottom: 12px;
+
+    --day-label-width: 35%;
+    --time-width: 65%;
+    
+    --container-body-color: white(235, 236, 250);
+
+    --primary-background-color: rgb(218, 216, 216);
+
+    --hover-primary-background-color: rgb(112, 112, 112);
+    --hover-primary-text-color: white;
+
+
+    --active-primary-background-color: rgb(48, 48, 48);
+    --active-primary-text-color: white;
+
+    --secondary-background-color: rgb(252, 212, 212);
+
+    --hover-secondary-background-color: rgb(109, 84, 84);
+    --hover-secondary-text-color: white;
+
+    --active-secondary-background-color: rgb(0, 0, 0);
+    --active-secondary-text-color: white;
+
+    --tertiary-background-color: rgb(212, 225, 252);
+
+    --hover-tertiary-background-color: rgb(89, 99, 120);
+    --hover-tertiary-text-color: white;
+
+    --active-tertiary-background-color: rgb(42, 49, 63);
+    --active-tertiary-text-color: white;
+
+    --unassigned-background-color: rgb(183, 244, 183);
+    --assigned-background-color: rgb(252, 248, 135);
+
+    --seconday-border: 2px solid rgb(109, 84, 84);
+
+}
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.hide {
+    display: none !important;
+}
+
+
+.focus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}

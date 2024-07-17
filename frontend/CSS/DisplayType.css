@@ -1,0 +1,72 @@
+:root {
+    --display-header-background-color: rgb(218, 216, 216);
+    --display-header-text-color: black;
+
+    --display-hover-header-background-color: rgb(112, 112, 112);
+    --display-hover-header-text-color: white;
+
+    --display-content-background-color: rgb(212, 225, 252);
+    --display-unassigned-background-color: rgb(183, 244, 183);
+    --display-assigned-background-color: rgb(252, 248, 135);
+
+    --dashed-border: 2px dashed black;
+
+    --content-stick-offset: 16px;
+
+}
+
+.header:has(.display){
+    color: var(--display-header-text-color);
+    background-color: var(--display-header-background-color);
+}
+
+.header:has(.display).hover {
+    color: var(--display-hover-header-text-color);
+    background-color: var(--display-hover-header-background-color);
+}
+.header:has(.display) .left-btn,
+.header:has(.display) .right-btn {
+    color: var(--form-header-text-color);
+}
+
+.body:has(.display) .content{
+    background-color: var(--display-content-background-color);
+}
+
+.body:has(.display) .unassigned{
+    background-color: var(--display-unassigned-background-color);
+}
+
+.body:has(.display) .assigned{
+    background-color: var(--display-assigned-background-color);
+}
+
+.container:has(.object)
+.header {
+    border-bottom: var(--dashed-border);
+}
+
+.container.positions:has(.unassigned)
+.content:has(.object) {
+    border-bottom: var(--dashed-border);
+}
+
+.container:has(.object) .footer:has(.display) .assign {
+    border-top: var(--dashed-border);
+}
+
+.header.sticky {
+    position: sticky;
+    top: 0;
+}
+
+.content.sticky {
+    position: sticky;
+    top: calc(var(--header-min-height) + var(--content-stick-offset));
+}
+
+.footer.sticky {
+    position: sticky;
+    bottom: 0;
+}
+

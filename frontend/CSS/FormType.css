@@ -1,0 +1,113 @@
+:root {
+    --form-header-background-color: rgb(0, 0, 0);
+    --form-header-text-color: white;
+
+    --form-body-background-color: white;
+    --form-btn-text-color: black;
+    --form-btn-background-color: rgb(252, 212, 212);
+    --form-btn-current-text-color: black;
+    --form-btn-current-background-color: rgb(218, 216, 216);
+    --form-btn-hover-text-color: white;
+    --form-btn-hover-background-color: rgb(109, 84, 84);
+    --form-btn-active-text-color: white;
+    --form-btn-active-background-color: black;
+
+    --time-table-head-text-color: white;
+    --time-table-head-background-color: rgb(112, 112, 112); 
+    --time-table-head-end-background-color: rgb(150, 149, 149); 
+
+    --time-table-odd-row-color: rgb(235, 236, 250);
+    --time-table-even-row-color: rgb(206, 201, 215);
+
+}
+
+.header:has(.form){
+
+    background-color: var(--form-header-background-color);
+}
+
+.header:has(.form) .left-btn,
+.header:has(.form) .right-btn {
+    color: var(--form-header-text-color);
+}
+
+.body:has(.form){
+    background-color: var(--form-body-background-color);
+}
+
+.body:has(.form) .form-btn {
+    color: var(--form-btn-text-color);
+    background-color: var(--form-btn-background-color);
+}
+
+.body:has(.form) .form-btn.current {
+    color: var(--form-btn-current-text-color);
+    background-color: var(--form-btn-current-background-color);
+}
+
+.body:has(.form) .form-btn:hover {
+    color: var(--form-btn-hover-text-color);
+    background-color: var(--form-btn-hover-background-color);
+}
+
+.body:has(.form) .form-btn.active {
+    font-weight: bold;
+    color: var(--form-btn-active-text-color);
+    background-color: var(--form-btn-active-background-color);
+}
+
+.time-table .head {
+    color: var(--time-table-head-text-color);
+    background-color: var(--time-table-head-background-color);
+}
+
+.time-table .even {
+    background-color: var(--time-table-even-row-color);
+}
+
+.time-table .odd {
+    background-color: var(--time-table-odd-row-color);
+}
+
+.time-table .dataset.active {
+    border: 2px solid black;
+}
+
+.head .end-data.active {
+    cursor: pointer;
+    padding: 6px 3px;
+    background-color: var(--time-table-head-end-background-color);
+}
+.head .end-data.break {
+    cursor: pointer;
+    padding: 6px 3px;
+    background-color: green;
+}
+
+.odd.dataset .end-data.break {
+    background-color: lightgreen;
+}
+
+.even.dataset .end-data.break {
+    background-color: rgb(97, 247, 187);
+}
+
+
+.footer:has(.form){
+    background-color: var(--form-body-background-color);
+}
+
+.footer:has(.form) .form-btn {
+    background-color: var(--form-btn-background-color);
+}
+
+.footer:has(.form) .form-btn:hover {
+    color: var(--form-btn-hover-text-color);
+    background-color: var(--form-btn-hover-background-color);
+}
+
+.footer:has(.form) .create.active {
+    color: var(--form-btn-hover-text-color);
+    background-color: var(--form-btn-hover-background-color);
+}
+

@@ -1,0 +1,102 @@
+:root {
+    --object-height: 30px;
+    --object-margin: 5px;
+
+    --object-background-color: white;
+    --object-active-hover-color: rgb(234, 233, 233);
+
+    --object-had-background-color: rgb(252, 248, 135);
+}
+
+.object {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: center;
+
+    height: var(--object-height);
+    width: 95%;
+
+    margin: var(--object-margin) 0;
+
+    background-color: var(--object-background-color);
+
+    border-radius: 10px;
+}
+
+.had {
+    background-color: var(--object-had-background-color);
+}
+
+.display:has(.unassigned) .object.hover {
+    border: 1px solid black;
+}
+
+body:has(#break.active) .object.hover {
+    border: 1px solid black;
+}
+
+.object-btns {
+    display: none;
+}
+
+.display:not(:has(.unassigned)) .object.hover .object-btns{
+    display: flex;
+    justify-content: center;
+
+    width: 110px    
+}
+
+.object-btn {
+    background-color: inherit;
+    border: none;
+}
+
+.object-header {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: center;
+
+    width: var(--max-width);
+}
+
+.display:not(:has(.unassigned)) .object.hover .object-header {
+    width: 280px;
+}
+
+.name-header {
+    text-align: center;
+    font-weight: bold;
+
+    width: 28%;
+}
+
+.display:not(:has(.unassigned)) .object.hover .name-header {
+    width: 100%;
+}
+
+.time-header {
+    text-align: center;
+    font-style: italic;
+
+    width: 44%;
+}
+
+.display:not(:has(.unassigned)) .object.hover .time-header {
+    display: none;
+}
+
+.info-header {
+    text-align: center;
+
+    width: 28%;
+}
+.display:not(:has(.unassigned)) .object.hover .info-header {
+    display: none;
+}
+
+
+

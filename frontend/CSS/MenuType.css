@@ -1,0 +1,153 @@
+:root {
+    --tab-background-color: rgb(235, 236, 250);
+    --tab-hover-background-color: rgb(206, 201, 215);
+    --tab-active-text-color: rgb(255, 255, 255);
+    --tab-active-background-color: rgb(130, 120, 150);
+
+    --menu-header-background-color: rgb(218, 216, 216);
+    --menu-header-text-color: black;
+    --menu-hover-header-background-color: rgb(112, 112, 112);
+    --menu-hover-header-text-color: white;
+
+    --menu-body-background-color: rgb(212, 225, 252);
+    --menu-break-body-background-color: rgb(252, 248, 135);
+    --menu-filter-text-color: black;
+    --menu-filter-background-color: rgb(212, 225, 252);
+    --menu-filter-hover-text-color: black;
+    --menu-filter-hover-background-color: rgb(167, 180, 217);
+    --menu-filter-current-text-color: rgb(86, 86, 86);
+    --menu-filter-current-background-color: rgb(235, 236, 250);
+    --menu-filter-active-text-color: white;
+    --menu-filter-active-background-color: rgb(100, 103, 110);
+
+    --menu-route-text-color: black;
+    --menu-route-background-color: rgb(252, 212, 212);
+    --menu-route-hover-text-color: white;
+    --menu-route-hover-background-color: rgb(109, 84, 84);
+}
+.page-tabs {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
+    margin-top: 5px;
+
+    width: 98%;
+}
+
+.tab {
+    width: 20%;
+    height: 2.5em;
+
+    margin: 0;
+    margin-right: 1px;
+
+    font-weight: bold;
+
+    background-color: var(--tab-background-color);
+    
+    border-top: var(--primary-border);
+    border-right: var(--primary-border);
+    border-bottom: 0;
+    border-left: var(--primary-border);
+
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+}
+
+.tab:hover {
+    background-color: var(--tab-hover-background-color);
+}
+
+.tab.active {
+    color: var(--tab-active-text-color);
+    background-color: var(--tab-active-background-color);
+}
+
+.filter {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--menu-header-background-color);
+}
+.filter button {
+    height: 40px;
+    margin: 5px 0;
+    color: var(--menu-filter-text-color);
+    background-color: var(--menu-filter-background-color);
+    border: none;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    font-weight: bold;
+
+}
+.filter button:hover {
+    color: var(--menu-filter-hover-text-color);
+    background-color: var(--menu-filter-hover-background-color);
+}
+.filter button.current {
+    color: var(--menu-filter-current-text-color);
+    background-color: var(--menu-filter-current-background-color);
+}
+.filter button.active {
+    color: var(--menu-filter-active-text-color);
+    background-color: var(--menu-filter-active-background-color);
+}
+.filter #day{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    width: 100%;
+}
+#day button {
+    width: 100px;
+}
+#day button:not(#thu) {
+    border-left: 2px solid black;
+
+}
+.filter #meal{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 5px;
+
+}
+#meal button {
+    width: 100px;
+}
+#meal button:not(#All) {
+    border-left: 2px solid black;
+
+}
+
+.header:has(.break) {
+    color: var(--menu-header-text-color);
+    background-color: var(--menu-header-background-color);
+}
+.body:has(.break) {
+    background-color: var(--menu-break-body-background-color);
+}
+
+.header:has(.new){
+    color: var(--menu-header-text-color);
+    background-color: var(--menu-header-background-color);
+}
+
+.header:has(.new).hover {
+    color: var(--menu-hover-header-text-color);
+    background-color: var(--menu-hover-header-background-color);
+}
+
+.body:has(.new) {
+    background-color: var(--menu-body-background-color);
+}
+
+.header:has(.route) {
+    color: var(--menu-route-text-color);
+    background-color: var(--menu-route-background-color);
+}
+
+.header:has(.route):hover {
+    color: var(--menu-route-hover-text-color);
+    background-color: var(--menu-route-hover-background-color);}
