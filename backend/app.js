@@ -30,25 +30,36 @@ app.get('/', (req, res) => {
     res.send('We are home')
 })
 
-app.post('/', async (req,res) => {
-    let data = {
-        username: req.body.username,
-        password: req.body.password
-    }
-    if(data.username === process.env.NORTHSTAR_USERNAME &&
-        data.password === process.env.NORTHSTAR_PASSWORD) {
-            await mongoose.connect(process.env.NORTHSTAR_CONNECTION);
-            data = {"Status": true};
-            res.json(data);
-    }
-    else{
-        data = {"Status": false};
-        res.json(data);
-    }
-});
+// app.post('/', async (req,res) => {
+//     let data = {
+//         username: req.body.username,
+//         password: req.body.password
+//     }
+//     if(data.username === process.env.NORTHSTAR_USERNAME &&
+//         data.password === process.env.NORTHSTAR_PASSWORD) {
+//             await mongoose.connect(process.env.NORTHSTAR_CONNECTION);
+//             data = {"Status": true};
+//             res.json(data);
+//     }
+//     else{
+//         data = {"Status": false};
+//         res.json(data);
+//     }
+// });
 
-mongoose.connect(process.env.NORTHSTAR_CONNECTION);
+// mongoose.connect(process.env.NORTHSTAR_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true });
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`Server running on port ${port}`);
+// });
+
+mongoose.connect(process.env.NORTHSTAR_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        app.listen(port, () => {
+            console.log(`Server running on port ${port}`);
+        });
+    })
+    .catch(err => {
+        console.error('Failed to connect to MongoDB', err);
+    });
+
