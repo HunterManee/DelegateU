@@ -1,7 +1,7 @@
 
 export default class ApiManager {
     static async _requestGetAll(route) {
-        return fetch(`http://localhost:3000/${route}`)
+        return fetch(`https://delegateubackend.azurewebsites.net/${route}`)
                 .then(result => {
                     if(!result.ok){
                         throw new Error('Network response was not ok')
@@ -18,7 +18,7 @@ export default class ApiManager {
     }
     
     static async _requestPost(route, newData) {
-        return fetch(`http://localhost:3000/${route}`, {
+        return fetch(`https://delegateubackend.azurewebsites.net/${route}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ export default class ApiManager {
     }
 
     static async _requestGetById(route, dataId) {
-        fetch(`http://localhost:3000/${route}/${dataId}`)
+        fetch(`https://delegateubackend.azurewebsites.net/${route}/${dataId}`)
         .then(result => result.json())
         .then(data => {
             console.log(data);
@@ -55,7 +55,7 @@ export default class ApiManager {
     }
 
     static async _requestPatch(route, dataId, newData) {
-        return fetch(`http://localhost:3000/${route}/${dataId}`, {
+        return fetch(`https://delegateubackend.azurewebsites.net/${route}/${dataId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -79,7 +79,7 @@ export default class ApiManager {
         })
     }
     static async _requestDelete(route, dataId) {
-        fetch(`http://localhost:3000/${route}/${dataId}`, {
+        fetch(`https://delegateubackend.azurewebsites.net/${route}/${dataId}`, {
             method: 'Delete'
         })
         .then(result => {
@@ -98,30 +98,30 @@ export default class ApiManager {
         })
     }
 
-    static async _requestLogIn(newData) {
-        return fetch(`http://localhost:3000/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newData)
-        })
-        .then(result => {
-            if(!result.ok) {
-                console.log('Problem');
-                return
-            }
+    // static async _requestLogIn(newData) {
+    //     return fetch(`http://localhost:3000/`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(newData)
+    //     })
+    //     .then(result => {
+    //         if(!result.ok) {
+    //             console.log('Problem');
+    //             return
+    //         }
     
-            return result.json();
-        })
-        .then(data => {
-            console.log('Success');
-            return data;
-        })
-        .catch(error => {
-            console.log(error);
-        })
-    }
+    //         return result.json();
+    //     })
+    //     .then(data => {
+    //         console.log('Success');
+    //         return data;
+    //     })
+    //     .catch(error => {
+    //         console.log(error);
+    //     })
+    // }
     
 }
 
