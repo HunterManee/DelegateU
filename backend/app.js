@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -47,19 +47,9 @@ app.get('/', (req, res) => {
 //     }
 // });
 
-// mongoose.connect(process.env.NORTHSTAR_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.NORTHSTAR_CONNECTION);
 
-// app.listen(port, () => {
-//     console.log(`Server running on port ${port}`);
-// });
-
-mongoose.connect(process.env.NORTHSTAR_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        app.listen(port, () => {
-            console.log(`Server running on port ${port}`);
-        });
-    })
-    .catch(err => {
-        console.error('Failed to connect to MongoDB', err);
-    });
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
 
