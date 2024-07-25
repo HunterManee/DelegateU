@@ -8,10 +8,9 @@ require('dotenv').config();
 
 //Connection Manager
 const bcrypt = require('bcrypt');
-const ClientGroupConnection = {};
-const GroupLoginData = {};
+const ConnectionManager = require('./ConnectionManager');
+const schemaGroupLogin = require('./models/GroupLogin');
 
-// console.log(process.env);
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -38,16 +37,18 @@ app.get('/', (req, res) => {
 app.post('/', async (req,res) => {
     const username = req.body.username;
     const password = req.body.password;
-    if(GroupLoginData[username] === undefined) {
+
+    const groupLoginData = ConnectionManager.getGroupLoginData(username);
+    if(groupLoginData === undefined) {
         const data = {'Status': false}
         res.json(data);
         return;
     }
-    const hashedPassword = GroupLoginData[username].hashedPassword;
+    const hashedPassword = groupLoginData.hashedPassword;
     bcrypt.compare(password, hashedPassword, (err, isMatch) => {
         if(err) throw err;
         if(isMatch) {
-            const groupId = GroupLoginData[username].groupId;
+            const groupId = groupLoginData.groupId;
             const data = {
                 'Status': true,
                 'groupId': groupId
@@ -68,37 +69,16 @@ async function getLoginInfo() {
     try{
         const dbURI = process.env.MASTER_CONNECTION;
         const connectionLoginInfo = mongoose.createConnection(dbURI);
-        const schemaGroupLogin = mongoose.Schema({
-            username: {
-                type: String,
-                required: true
-            },
-            password: {
-                type: String,
-                required: true
-            },
-            connection: {
-                type: String,
-                required: true
-            }
-        })
         const GroupLogin = connectionLoginInfo.model('GroupLogin', schemaGroupLogin);
         const allLogin = await GroupLogin.find();
         for(const login of allLogin) {
             const groupId = JSON.stringify(login._id).split('"')[1];
             const connection = login.connection;
-            const connectionDiningHall = await mongoose.connect(connection);
-            ClientGroupConnection[groupId] = {
-                'connection': connectionDiningHall,
-                'clients': new Array()
-            }
+            const clusterConnection = mongoose.createConnection(connection);
+            ConnectionManager.addClientGroupConnection(groupId, clusterConnection);
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(login.password, salt);
-
-            GroupLoginData[login.username] = {
-                'groupId': groupId,
-                'hashedPassword': hashedPassword
-            };
+            ConnectionManager.addGroupLoginData(login.username, groupId, hashedPassword);
         }
         await connectionLoginInfo.close();
     }catch(error) {

@@ -15,4 +15,4 @@ const BreakSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('Break', BreakSchema);
+module.exports = BreakSchema;

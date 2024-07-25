@@ -119,7 +119,7 @@ export default class DataManager{
 
     static async postLogin(body) {
         try {
-            await ApiManager._requestLogIn(body);
+            const data = await ApiManager._requestLogIn(body);
         }catch(error) {
             console.log({message: error});
         }

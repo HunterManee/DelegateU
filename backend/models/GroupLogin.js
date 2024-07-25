@@ -15,4 +15,4 @@ const GroupLoginSchema = mongoose.Schema({
     }
 })
 
-module.exports = connectionLoginInfo.module('GroupLogin', GroupLoginSchema);
+module.exports = GroupLoginSchema;

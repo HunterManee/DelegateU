@@ -1,8 +1,13 @@
 const express = require('express');
+const ConnectionManager = require('../ConnectionManager');
 const router = express.Router();
-const Person = require('../models/Person');
+const schemaPerson = require('../models/Person');
 
 router.get('/', async(req, res) => {
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Person = connectionGroup.model('Person', schemaPerson);
     try{
         const people = await Person.find();
         res.json(people);
@@ -12,6 +17,10 @@ router.get('/', async(req, res) => {
 });
 
 router.post('/', async (req,res) => {
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Person = connectionGroup.model('Person', schemaPerson);
     const person = new Person({
         name: req.body.name,
 
@@ -69,6 +78,10 @@ router.post('/', async (req,res) => {
 });
 
 router.get('/:personId', async (req, res) => {
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Person = connectionGroup.model('Person', schemaPerson);
     try{
         const person = await Person.findById(req.params.personId);
         res.json(person);
@@ -87,6 +100,10 @@ router.delete('/:personId', async (req,res) => {
 })
 
 router.patch('/:personId', async(req,res)=>{
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Person = connectionGroup.model('Person', schemaPerson);
     try{
         const updatedPerson = await Person.findByIdAndUpdate(
             req.params.personId,

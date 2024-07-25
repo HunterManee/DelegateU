@@ -1,8 +1,13 @@
 const express = require('express');
+const ConnectionManager = require('../ConnectionManager');
 const router = express.Router();
-const Position = require('../models/Position');
+const schemaPosition = require('../models/Position');
 
 router.get('/', async (req, res) => {
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Position = connectionGroup.model('Position', schemaPosition);
     try{
         const positions = await Position.find();
         res.json(positions);
@@ -12,6 +17,10 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req,res) => {
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Position = connectionGroup.model('Position', schemaPosition);
     const position = new Position({
         name: req.body.name,
 
@@ -112,6 +121,10 @@ router.post('/', async (req,res) => {
 });
 
 router.get('/:positionId', async (req, res) => {
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Position = connectionGroup.model('Position', schemaPosition);
     try{
         const position = await Position.findById(req.params.positionId);
         res.json(position);
@@ -123,6 +136,10 @@ router.get('/:positionId', async (req, res) => {
 });
 
 router.delete('/:positionId', async (req,res) => {
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Position = connectionGroup.model('Position', schemaPosition);
     try{
         const removedPosition = await Position.findByIdAndDelete(req.params.positionId)
         res.json(removedPosition);
@@ -132,6 +149,10 @@ router.delete('/:positionId', async (req,res) => {
 })
 
 router.patch('/:positionId', async(req,res)=>{
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Position = connectionGroup.model('Position', schemaPosition);
     try{
         const updatedPosition = await Position.findByIdAndUpdate(
             req.params.positionId,

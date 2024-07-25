@@ -351,4 +351,4 @@ const PositionSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('Positions', PositionSchema);
+module.exports = PositionSchema;

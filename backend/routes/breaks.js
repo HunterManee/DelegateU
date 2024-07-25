@@ -1,8 +1,13 @@
 const express = require('express');
+const ConnectionManager = require('../ConnectionManager');
 const router = express.Router();
-const Break = require('../models/Break');
+const schemaBreak = require('../models/Break');
 
-router.get('/', async(req, res) => {
+router.get('/', async(req, res) => { 
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Break = connectionGroup.model('Break', schemaBreak);
     try{
         const breaks = await Break.find();
         res.json(breaks);
@@ -12,6 +17,10 @@ router.get('/', async(req, res) => {
 });
 
 router.post('/', async (req,res) => {
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Break = connectionGroup.model('Break', schemaBreak);
     const newBreak = new Break({
         personId: req.body.personId,
         start: req.body.start,
@@ -27,6 +36,10 @@ router.post('/', async (req,res) => {
 });
 
 router.get('/:personId', async (req, res) => {
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Break = connectionGroup.model('Break', schemaBreak);
     try{
         const breaks = await Break.find();
         for(const datasetBreak of breaks) {
@@ -41,6 +54,10 @@ router.get('/:personId', async (req, res) => {
 })
 
 router.delete('/:personId', async (req,res) => {
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    const connectionGroup = connectionClientGroup['connection'];
+    const Break = connectionGroup.model('Break', schemaBreak); 
     try{
         const personId = req.params.personId;
         const breaks = await Break.find();
