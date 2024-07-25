@@ -99,4 +99,12 @@ export default class HolderElement extends HtmlElement {
             element.remove();
         }
     }
+
+    static clearAll() {
+        const HtmlBody = document.querySelector('body')
+        const elementsHolder = HtmlBody.querySelectorAll('.holder');
+        for(const element of elementsHolder) {
+            element.remove();
+        }
+    }
 }

@@ -11,8 +11,8 @@ export default class MenuElement extends HtmlElement{
 
     static setDefaultTab() {
         this.tabType = 'filter';
-        const positions = DataManager.getLocalCollection('positions');
-        if(positions.length === 0) {this.tabType = 'new'}
+        const roles = DataManager.getLocalCollection('roles');
+        if(roles.length === 0) {this.tabType = 'new'}
     }
 
     static mechanicMenu(elementHeader, structureHeader) {

@@ -1,5 +1,7 @@
 
 export default class ApiManager {
+    static idDiningGroup = '';
+
     static async _requestGetAll(route) {
         return fetch(`https://delegateubackend.azurewebsites.net/${route}`)
                 .then(result => {

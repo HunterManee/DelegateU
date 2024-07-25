@@ -9,6 +9,10 @@ import DateTimeManager from '../Managers/DateTimeManger.js';
 import DataManager from '../Managers/DataManager.js';
 import ClockManager from '../Managers/ClockManager.js';
 import MenuElement from './Elements/MenuElement.js';
+import LoginElement from './Elements/LoginElement.js';
+import LoginListeners from './Listeners/LoginListeners.js';
+
+
 
 const mutationCallBack = (mutationList) => {
     for(let mutation of mutationList){ 
@@ -63,8 +67,11 @@ const mutationCallBack = (mutationList) => {
                             continue;
                         }
                     }
+                    else if(addedNode.id === 'login-background') {
+                        LoginListeners.setLoginListeners(addedNode);
+                    }
                     else {
-                        // console.log(addedNode);
+                        console.log(addedNode);
                     }
                 }
             }
@@ -79,14 +86,16 @@ const config = {childList: true, subtree: true};
 observer.observe(targetNode, config);
 
 
-try{
-    await DataManager.getCollections();
-    MenuElement.setDefaultTab();
-    DateTimeManager.setWeekdayMap();
-    HolderElement.appendHolder('header', 1, 'menu');
-    HolderElement.appendHolder('body');
-    HolderElement.appendHolder('footer', 1, 'menu');
-    ClockManager.startClock();
-}catch(error){
-    console.error({message: error});
-}
+LoginElement.mechanicLogin();
+
+// try{
+//     await DataManager.getCollections();
+//     MenuElement.setDefaultTab();
+//     DateTimeManager.setWeekdayMap();
+//     HolderElement.appendHolder('header', 1, 'menu');
+//     HolderElement.appendHolder('body');
+//     HolderElement.appendHolder('footer', 1, 'menu');
+//     ClockManager.startClock();
+// }catch(error){
+//     console.error({message: error});
+// }

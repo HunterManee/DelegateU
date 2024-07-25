@@ -115,6 +115,9 @@ export default class DataManager{
             }
         }
         ApiManager._requestDelete(route, dataId);
+    }
+
+    static async postLogin() {
 
     }
 }
