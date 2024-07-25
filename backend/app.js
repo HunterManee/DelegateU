@@ -48,7 +48,11 @@ app.post('/', async (req,res) => {
         if(err) throw err;
         if(isMatch) {
             const groupId = GroupLoginData[username].groupId;
-            res.json(groupId);
+            const data = {
+                'Status': true,
+                'groupId': groupId
+            }
+            res.json(data);
             //connect client via websocket
             //add websocket connection to ClientGroupConnection
             return;

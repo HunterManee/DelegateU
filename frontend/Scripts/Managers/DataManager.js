@@ -117,7 +117,11 @@ export default class DataManager{
         ApiManager._requestDelete(route, dataId);
     }
 
-    static async postLogin() {
-
+    static async postLogin(body) {
+        try {
+            await ApiManager._requestLogIn(body);
+        }catch(error) {
+            console.log({message: error});
+        }
     }
 }

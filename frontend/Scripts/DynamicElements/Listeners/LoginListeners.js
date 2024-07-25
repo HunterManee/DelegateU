@@ -13,8 +13,8 @@ export default class LoginListeners {
             body['username'] = username.value;
             body['password'] = password.value;
 
-            password.value = '';
-            console.log(body);
+            // password.value = '';
+            DataManager.postLogin(body);
 
         })
     }

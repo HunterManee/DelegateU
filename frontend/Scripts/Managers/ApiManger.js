@@ -1,6 +1,6 @@
 
 export default class ApiManager {
-    static idDiningGroup = '';
+    static idDiningGroup = undefined;
 
     static async _requestGetAll(route) {
         return fetch(`https://delegateubackend.azurewebsites.net/${route}`)
@@ -100,30 +100,33 @@ export default class ApiManager {
         })
     }
 
-    // static async _requestLogIn(newData) {
-    //     return fetch(`http://localhost:3000/`, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(newData)
-    //     })
-    //     .then(result => {
-    //         if(!result.ok) {
-    //             console.log('Problem');
-    //             return
-    //         }
+    static async _requestLogIn(newData) {
+        return fetch(`http://localhost:3000/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newData)
+        })
+        .then(result => {
+            if(!result.ok) {
+                console.log('Problem');
+                return
+            }
     
-    //         return result.json();
-    //     })
-    //     .then(data => {
-    //         console.log('Success');
-    //         return data;
-    //     })
-    //     .catch(error => {
-    //         console.log(error);
-    //     })
-    // }
+            return result.json();
+        })
+        .then(data => {
+            console.log('Success');
+            if(data.Status === true) {
+                this.idDiningGroup = data.groupId;
+            }
+            return data;
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
     
 }
 
