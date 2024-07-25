@@ -5,6 +5,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
+const bcrypt = require('bcrypt');
+const ClientGroupConnection = {};
+const GroupLoginData = {};
 
 // console.log(process.env);
 
@@ -47,7 +50,53 @@ app.get('/', (req, res) => {
 //     }
 // });
 
-mongoose.connect(process.env.NORTHSTAR_CONNECTION);
+async function getLoginInfo() {
+    try{
+        const dbURI = process.env.MASTER_CONNECTION;
+        const connectionLoginInfo = mongoose.createConnection(dbURI);
+        const schemaGroupLogin = mongoose.Schema({
+            username: {
+                type: String,
+                required: true
+            },
+            password: {
+                type: String,
+                required: true
+            },
+            connection: {
+                type: String,
+                required: true
+            }
+        })
+        const GroupLogin = connectionLoginInfo.model('GroupLogin', schemaGroupLogin);
+        const allLogin = await GroupLogin.find();
+        for(const login of allLogin) {
+            const groupId = JSON.stringify(login._id).split('"')[1];
+            const connection = login.connection;
+            const connectionDiningHall = await mongoose.connect(connection);
+            ClientGroupConnection[groupId] = {
+                'connection': connectionDiningHall,
+                'clients': new Array()
+            }
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(login.password, salt);
+
+            GroupLoginData[login.username] = {
+                'groupId': groupId,
+                'hashedPassword': hashedPassword
+            };
+        }
+        await connectionLoginInfo.close();
+
+        console.log(ClientGroupConnection);
+        console.log(GroupLoginData);
+    }catch(error) {
+        console.log({message: error});
+    }
+}
+
+getLoginInfo();
+
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
