@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
+
+//Connection Manager
 const bcrypt = require('bcrypt');
 const ClientGroupConnection = {};
 const GroupLoginData = {};
@@ -33,22 +35,30 @@ app.get('/', (req, res) => {
     res.send('We are home')
 })
 
-// app.post('/', async (req,res) => {
-//     let data = {
-//         username: req.body.username,
-//         password: req.body.password
-//     }
-//     if(data.username === process.env.NORTHSTAR_USERNAME &&
-//         data.password === process.env.NORTHSTAR_PASSWORD) {
-//             await mongoose.connect(process.env.NORTHSTAR_CONNECTION);
-//             data = {"Status": true};
-//             res.json(data);
-//     }
-//     else{
-//         data = {"Status": false};
-//         res.json(data);
-//     }
-// });
+app.post('/', async (req,res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    if(GroupLoginData[username] === undefined) {
+        const data = {'Status': false}
+        res.json(data);
+        return;
+    }
+    const hashedPassword = GroupLoginData[username].hashedPassword;
+    bcrypt.compare(password, hashedPassword, (err, isMatch) => {
+        if(err) throw err;
+        if(isMatch) {
+            const groupId = GroupLoginData[username].groupId;
+            res.json(groupId);
+            //connect client via websocket
+            //add websocket connection to ClientGroupConnection
+            return;
+        }else {
+            const data = {'Status': false}
+            res.json(data);
+            return; 
+        }
+    })
+});
 
 async function getLoginInfo() {
     try{
@@ -87,14 +97,10 @@ async function getLoginInfo() {
             };
         }
         await connectionLoginInfo.close();
-
-        console.log(ClientGroupConnection);
-        console.log(GroupLoginData);
     }catch(error) {
         console.log({message: error});
     }
 }
-
 getLoginInfo();
 
 
