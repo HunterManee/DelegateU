@@ -106,5 +106,9 @@ export default class HolderElement extends HtmlElement {
         for(const element of elementsHolder) {
             element.remove();
         }
+        const elementLogin = document.getElementById('login-background');
+        if(elementLogin !== null) {
+            elementLogin.remove();
+        }
     }
 }

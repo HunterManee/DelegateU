@@ -71,7 +71,7 @@ const mutationCallBack = (mutationList) => {
                         LoginListeners.setLoginListeners(addedNode);
                     }
                     else {
-                        console.log(addedNode);
+                        // console.log(addedNode);
                     }
                 }
             }
@@ -87,15 +87,3 @@ observer.observe(targetNode, config);
 
 
 LoginElement.mechanicLogin();
-
-// try{
-//     await DataManager.getCollections();
-//     MenuElement.setDefaultTab();
-//     DateTimeManager.setWeekdayMap();
-//     HolderElement.appendHolder('header', 1, 'menu');
-//     HolderElement.appendHolder('body');
-//     HolderElement.appendHolder('footer', 1, 'menu');
-//     ClockManager.startClock();
-// }catch(error){
-//     console.error({message: error});
-// }

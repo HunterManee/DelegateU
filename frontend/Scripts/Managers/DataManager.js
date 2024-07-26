@@ -120,6 +120,10 @@ export default class DataManager{
     static async postLogin(body) {
         try {
             const data = await ApiManager._requestLogIn(body);
+            if(data.Status === true) {
+                await this.getCollections();
+            }
+            return data;
         }catch(error) {
             console.log({message: error});
         }
