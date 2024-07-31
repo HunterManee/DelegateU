@@ -1,5 +1,8 @@
 import ApiManager from "./ApiManger.js"
 import BreakManager from "./BreakManager.js";
+import WebSocketManager from "../Managers/WebSocketManager.js";
+import FormElement from "../DynamicElements/Elements/FooterElement.js";
+
 
 export default class DataManager{
     static #collections = {}
@@ -44,7 +47,6 @@ export default class DataManager{
 
     static async postLocalCollection(route, formCollection){
         const collection = this.getLocalCollection(route);
-        const newFormCollection = new Array();
         for(let i = 0; i < formCollection.length; i++) {
             let counter = 0;
             let name = formCollection[i].name;
@@ -72,18 +74,17 @@ export default class DataManager{
             if(counter > 0) {
                 formCollection[i].name = `${name}_Copy(${counter})`;
             }
-            try{
-                const data = await ApiManager._requestPost(route, formCollection[i]);
-                if(data != undefined){
-                    newFormCollection.push(data);
-                }
-            }catch(error){
-                console.log({message: error});
+        }
+        try{
+            if(route === "positions") {
+                await ApiManager._requestPost(route, formCollection);
+            }else {
+                await ApiManager._requestPost(route, formCollection[0]);
             }
+        }catch(err) {
+            console.error({message: err});
         }
-       for(const dataset of newFormCollection){
-            this.#collections[route].push(dataset);
-        }
+
     }
 
     static async postLocalData(route, body) {
@@ -96,31 +97,46 @@ export default class DataManager{
         console.log({message: error});
        }
     }
+
+    static addDatasetToLocalCollection(route, dataset) {
+        this.#collections[route].push(dataset);
+    }
  
     static async patchLocalData(route, id, body){
-        const dataset = this.getLocalDataset(route, id);
+        try{
+           await ApiManager._requestPatch(route, id, body);
+        }catch(err) {
+            console.error({message: err});
+        }
+    }
 
-        for(const key of Object.keys(body)){
+    static updateDatasetOfLocalCollection(route, id, body) {
+        const dataset = this.getLocalDataset(route, id);
+        for(const key of Object.keys(body)) {
             dataset[key] = body[key];
         }
-
-        ApiManager._requestPatch(route, id, body);
     }
 
     static async deleteLocalData(route, dataId){
-        for(let i = this.#collections[route].length-1; i >= 0; i--){
-            if(dataId === this.#collections[route][i]._id){
-                this.#collections[route].splice(i,1);
-                break;
-            }
+        try {
+            await ApiManager._requestDelete(route, dataId);
+        }catch(err) {
+            console.errror({message: err});
         }
-        ApiManager._requestDelete(route, dataId);
+    }
+
+    static deleteDatasetFromLocalCollection(route, id) {
+        const index = this.#collections[route].findIndex(item => item._id === id);
+        if (index !== -1) {
+            this.#collections[route].splice(index, 1);
+        }
     }
 
     static async postLogin(body) {
         try {
             const data = await ApiManager._requestLogIn(body);
             if(data.Status === true) {
+                WebSocketManager.connect();
                 await this.getCollections();
             }
             return data;
@@ -128,4 +144,5 @@ export default class DataManager{
             console.log({message: error});
         }
     }
+
 }

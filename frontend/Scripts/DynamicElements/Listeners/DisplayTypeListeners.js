@@ -1,7 +1,6 @@
 import DataManager from "../../Managers/DataManager.js";
 import FormManager from "../../Managers/FormManager.js";
 import ContainerElement from "../Elements/ContainerElement.js";
-import HolderElement from "../Elements/HolderElement.js";
 import HtmlElement from "../Elements/HtmlElement.js";
 import MenuElement from "../Elements/MenuElement.js";
 import ObjectElement from "../Elements/ObjectElement.js";
@@ -27,13 +26,33 @@ export default class DisplayTypeListeners {
         const activeDisplay = elementContainer.querySelector('.unassigned') !== null;
         if(activeDisplay === false) {
             const btnDelete = elementDisplay.querySelector('.left-btn');
-            btnDelete.addEventListener('click', () => {
+            btnDelete.addEventListener('click', async() => {
                 const elementContainer = 
                     HtmlElement.getParentElement(btnDelete, 'container');
                 const route = elementContainer.classList[0];
                 const id = elementContainer.classList[1];
-                DataManager.deleteLocalData(route, id);
-                elementContainer.remove();
+                try{
+                    const people = elementContainer.querySelectorAll('.people');
+                    for(const person of people) {
+                        const body = {};
+                        const personId = person.classList[1];
+                        const dataset = DataManager.getLocalDataset('people', personId);
+                        if(dataset['role'] === id) {
+                            body['role'] = 'unassigned';
+                        }
+                        const days = new Array('thu', 'fri', 'sat', 'sun', 'mon', 'tue', 'wed');
+                        for(const day of days) {
+                            if(dataset[`${day}Position`] === id) {
+                                body[`${day}Position`] = 'unassigned';
+                            }
+                        }
+
+                        await DataManager.patchLocalData('people', personId, body);
+                    }
+                    await DataManager.deleteLocalData(route, id);
+                }catch(err) {
+                    console.error({message: err});
+                }
             })
             const btnEdit = elementDisplay.querySelector('.right-btn');
             btnEdit.addEventListener('click', () => {

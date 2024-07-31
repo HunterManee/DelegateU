@@ -58,7 +58,6 @@ export default class ObjectListeners {
                 const route = elementObject.classList[0];
                 const id = elementObject.classList[1];
                 DataManager.deleteLocalData(route, id);
-                elementObject.remove();
             })
         }
         const btnEdit = elementObject.querySelector('.right-btn');

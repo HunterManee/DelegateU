@@ -226,6 +226,19 @@ export default class FormManager {
             errors.push('name');
         }
 
+        if(formDataset.route === 'people') {
+            const days = new Array('thu', 'fri', 'sat', 'sun', 'mon', 'tue', 'wed');
+            let hasError = true;
+            for(const day of days) {
+                if(formDataset[day] === true) {
+                    hasError = false;
+                }
+            }
+            if(hasError === true) {
+                errors.push('time-table');
+            }
+        }
+
         return errors;
     }
 

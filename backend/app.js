@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const http = require('http');
+const WebSocket = require('ws');
 const bcrypt = require('bcrypt');
 const ConnectionManager = require('./ConnectionManager');
 const schemaGroupLogin = require('./models/GroupLogin');
@@ -29,6 +31,11 @@ app.get('/', (req, res) => {
     res.send('We are home')
 })
 
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
+
+
 app.post('/', async (req,res) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -49,8 +56,6 @@ app.post('/', async (req,res) => {
                 'groupId': groupId
             }
             res.json(data);
-            //connect client via websocket
-            //add websocket connection to ClientGroupConnection
             return;
         }else {
             const data = {'Status': false}
@@ -82,8 +87,44 @@ async function getLoginInfo() {
 }
 getLoginInfo();
 
+// Create HTTP server and WebSocket server
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 
-app.listen(port, () => {
+// Assuming ws is the WebSocket connection and groupId is obtained after login
+wss.on('connection', (ws) => {
+    console.log('New WebSocket connection established');
+    ws.on('message', (message) => {
+        console.log('Received message:', message);
+        // Handle incoming message, e.g., add to group
+        const { groupId, action } = JSON.parse(message);
+
+        if (action === 'join') {
+            ws.groupId = groupId;
+            ConnectionManager.addClientToGroup(groupId, ws);
+        }
+    });
+
+    ws.on('error', (err) => {
+        console.error('WebSocket error:', err);
+        if (ws.groupId) {
+            ConnectionManager.removeClientFromGroup(ws.groupId, ws);
+            console.log(`Client removed from group ${ws.groupId} due to error`);
+        }
+    });
+
+    ws.on('close', () => {
+        console.log('WebSocket connection closed');
+        if (ws.groupId) {
+            ConnectionManager.removeClientFromGroup(ws.groupId, ws);
+            console.log(`Client removed from group ${ws.groupId}`);
+        }
+    });
+});
+
+
+
+server.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 

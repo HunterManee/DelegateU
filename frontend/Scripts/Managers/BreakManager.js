@@ -49,6 +49,9 @@ export default class BreakManager {
 
     static updateBreakClock() {
         const elementTabBreak = document.getElementById('break');
+        if(elementTabBreak === null) {
+            return;
+        }
         if(elementTabBreak.classList.contains('active') === false) {
             return;
         }

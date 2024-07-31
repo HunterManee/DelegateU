@@ -6,19 +6,27 @@ const schemaPerson = require('../models/Person');
 router.get('/', async(req, res) => {
     const groupId = req.query.groupId;
     const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    if (!connectionClientGroup) {
+        res.status(404).json({ message: 'Group not found' });
+        return;
+    }
     const connectionGroup = connectionClientGroup['connection'];
     const Person = connectionGroup.model('Person', schemaPerson);
     try{
-        const people = await Person.find();
-        res.json(people);
+        const person = await Person.find();
+        res.json(person);
     }catch(error){
-        res.json({message: error});
-    }
+        console.error('Error fetching person:', error);
+        res.status(500).json({ message: error.message });    }
 });
 
 router.post('/', async (req,res) => {
     const groupId = req.query.groupId;
     const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    if (!connectionClientGroup) {
+        res.status(404).json({ message: 'Group not found' });
+        return;
+    }
     const connectionGroup = connectionClientGroup['connection'];
     const Person = connectionGroup.model('Person', schemaPerson);
     const person = new Person({
@@ -71,37 +79,63 @@ router.post('/', async (req,res) => {
     })
     try{
         const savedPerson = await person.save()
-        res.json(savedPerson);
+        ConnectionManager.broadcastRequestToGroup(groupId, savedPerson, 'people', 'POST');
+        res.status(201).json({ message: 'Person saved successfully' });
     }catch(error){
-        res.json({message: error});
-    }
+        console.error('Error saving person:', error);
+        res.status(500).json({ message: error.message });    }
 });
 
 router.get('/:personId', async (req, res) => {
     const groupId = req.query.groupId;
     const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    if (!connectionClientGroup) {
+        res.status(404).json({ message: 'Group not found' });
+        return;
+    }
     const connectionGroup = connectionClientGroup['connection'];
     const Person = connectionGroup.model('Person', schemaPerson);
     try{
         const person = await Person.findById(req.params.personId);
+        if (!person) {
+            res.status(404).json({ message: 'Person not found' });
+            return;
+        }
         res.json(person);
     }catch(error){
-        res.json({message: error});
-    }
+        console.error('Error fetching person:', error);
+        res.status(500).json({ message: error.message });    }
 })
 
 router.delete('/:personId', async (req,res) => {
+    const groupId = req.query.groupId;
+    const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    if (!connectionClientGroup) {
+        res.status(404).json({ message: 'Group not found' });
+        return;
+    }
+    const connectionGroup = connectionClientGroup['connection'];
+    const Person = connectionGroup.model('Person', schemaPerson);
     try{
         const removedPerson = await Person.findByIdAndDelete(req.params.personId)
-        res.json(removedPerson);
+        if (!removedPerson) {
+            res.status(404).json({ message: 'Person not found' });
+            return;
+        }
+        ConnectionManager.broadcastRequestToGroup(groupId, removedPerson, 'people', 'DELETE');
+        res.json({ message: 'Person deleted successfully' });
     }catch(error){
-        res.json({message: error});
-    }
+        console.error('Error deleting person:', error);
+        res.status(500).json({ message: error.message });    }
 })
 
 router.patch('/:personId', async(req,res)=>{
     const groupId = req.query.groupId;
     const connectionClientGroup = ConnectionManager.getClientGroupConnection(groupId);
+    if (!connectionClientGroup) {
+        res.status(404).json({ message: 'Group not found' });
+        return;
+    }
     const connectionGroup = connectionClientGroup['connection'];
     const Person = connectionGroup.model('Person', schemaPerson);
     try{
@@ -110,10 +144,15 @@ router.patch('/:personId', async(req,res)=>{
             { $set: req.body},
             { new: true, runVailidators: true}
         );
+        if (!updatedPerson) {
+            res.status(404).json({ message: 'Person not found' });
+            return;
+        }
+        ConnectionManager.broadcastRequestToGroup(groupId, updatedPerson, 'people', 'PATCH');
         res.json(updatedPerson);
     }catch(error){
-        res.json({message: error});
-    }
+        console.error('Error updating person:', error);
+        res.status(500).json({ message: error.message });    }
 })
 
 

@@ -3,7 +3,7 @@ export default class ApiManager {
     static idDiningGroup = undefined;
 
     static async _requestGetAll(route) {
-        return fetch(`https://delegateubackend.azurewebsites.net/${route}?groupId=${this.idDiningGroup}`)
+        return fetch(`http://localhost:3000/${route}?groupId=${this.idDiningGroup}`)
                 .then(result => {
                     if(!result.ok){
                         throw new Error('Network response was not ok')
@@ -20,7 +20,7 @@ export default class ApiManager {
     }
     
     static async _requestPost(route, newData) {
-        return fetch(`https://delegateubackend.azurewebsites.net/${route}?groupId=${this.idDiningGroup}`, {
+        return fetch(`http://localhost:3000/${route}?groupId=${this.idDiningGroup}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -36,8 +36,7 @@ export default class ApiManager {
             return result.json();
         })
         .then(data => {
-            console.log('Success');
-            return data;
+            console.log(data);
         })
         .catch(error => {
             console.log(error);
@@ -45,10 +44,9 @@ export default class ApiManager {
     }
 
     static async _requestGetById(route, dataId) {
-        fetch(`https://delegateubackend.azurewebsites.net/${route}/${dataId}?groupId=${this.idDiningGroup}`)
+        return fetch(`http://localhost:3000/${route}/${dataId}?groupId=${this.idDiningGroup}`)
         .then(result => result.json())
         .then(data => {
-            console.log(data);
             return data;
         })
         .catch(error => {
@@ -57,7 +55,7 @@ export default class ApiManager {
     }
 
     static async _requestPatch(route, dataId, newData) {
-        return fetch(`https://delegateubackend.azurewebsites.net/${route}/${dataId}?groupId=${this.idDiningGroup}`, {
+        return fetch(`http://localhost:3000/${route}/${dataId}?groupId=${this.idDiningGroup}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -73,15 +71,14 @@ export default class ApiManager {
             return result.json();
         })
         .then(data => {
-            console.log('Success');
-            return data;
+            console.log(data);
         })
         .catch(error => {
             console.log(error);
         })
     }
     static async _requestDelete(route, dataId) {
-        fetch(`https://delegateubackend.azurewebsites.net/${route}/${dataId}?groupId=${this.idDiningGroup}`, {
+        return fetch(`http://localhost:3000/${route}/${dataId}?groupId=${this.idDiningGroup}`, {
             method: 'Delete'
         })
         .then(result => {
@@ -93,7 +90,7 @@ export default class ApiManager {
             return result.json();
         })
         .then(data => {
-            console.log('Success');
+            console.log(data);
         })
         .catch(error => {
             console.log(error);
@@ -101,7 +98,7 @@ export default class ApiManager {
     }
 
     static async _requestLogIn(newData) {
-        return fetch(`https://delegateubackend.azurewebsites.net/`, {
+        return fetch(`http://localhost:3000/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

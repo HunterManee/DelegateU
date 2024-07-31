@@ -159,7 +159,7 @@ export default class ObjectElement extends HtmlElement {
             const boolLeftBtn = true;
             const boolRightBtn = true;
             const datasetObject =
-                DataManager.getLocalDataset(objectRoute, objectId);
+            DataManager.getLocalDataset(objectRoute, objectId);
             const structureObject =
             ObjectStructure.getObjectStructure(boolLeftBtn, boolRightBtn, datasetObject, containerRoute);
             object.remove();

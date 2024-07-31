@@ -2,7 +2,6 @@ import BreakManager from "../../Managers/BreakManager.js";
 import DataManager from "../../Managers/DataManager.js";
 import DateTimeManager from "../../Managers/DateTimeManger.js";
 import FormManager from "../../Managers/FormManager.js";
-import SortingManager from "../../Managers/SortingManger.js";
 import ContainerElement from "../Elements/ContainerElement.js";
 import HolderElement from "../Elements/HolderElement.js";
 import HtmlElement from "../Elements/HtmlElement.js";
@@ -46,9 +45,6 @@ export default class FormTypeListeners {
                         const formCollection = FormManager.getFormCollection();
                         try {
                             await DataManager.postLocalCollection(formDataset.route, formCollection)
-                            FormManager.clearFormCollection();
-                            const elementHolderBody = document.getElementById('body');
-                            HolderElement.mechanicHolder(elementHolderBody);
                         }catch(error){
                             console.error(error);
                         }
@@ -56,11 +52,16 @@ export default class FormTypeListeners {
                         DataManager.patchLocalData(formDataset.route, formDataset._id, formDataset);
                         ContainerElement.resetContainerElement(elementContainer);
                     }
-                    FormManager.clearFormDataset();
+                    FormManager.clearFormDataset();//not need after patch has been reworked
                     if(MenuElement.tabType === 'break') {
                         BreakManager.onObjectBreak();
                     }
                     return;
+                }else {
+                    if(errors.includes('name')) {
+                        const nameTextbox = elementContainer.querySelector('.name-title');
+                        nameTextbox.classList.add('error');
+                    }
                 }
             })
         }
@@ -133,7 +134,8 @@ export default class FormTypeListeners {
                         return;
                     }
                     HtmlElement.addHideToElement(startTime);
-                    HtmlElement.addHideToElement(endTime);                })
+                    HtmlElement.addHideToElement(endTime);                
+                })
             }
         }
     }
@@ -157,6 +159,11 @@ export default class FormTypeListeners {
                     createCounter++;
                     btnCreate.innerText = `Create (${createCounter})`;
                     FormManager.pushDatasetToFormCollection(formDataset);
+                }else {
+                    if(errors.includes('name')) {
+                        const nameTextbox = elementContainer.querySelector('.name-title');
+                        nameTextbox.classList.add('error');
+                    }
                 }
             })
         }
@@ -191,14 +198,11 @@ export default class FormTypeListeners {
                             HolderElement.mechanicHolder(elementHolderBody);
                         }
                         const formCollection = FormManager.getFormCollection();
-                        try {
+                        try{
                             await DataManager.postLocalCollection(formDataset.route, formCollection)
-                            FormManager.clearFormCollection();
-                            const elementHolderBody = document.getElementById('body');
-                            HolderElement.mechanicHolder(elementHolderBody);
-                        }catch(error){
-                            console.error(error);
-                        }      
+                        }catch(err) {
+                            console.error({message: err});
+                        }
                     }else if(option === 'Change') {
                         DataManager.patchLocalData(formDataset.route, formDataset._id, formDataset);
                         ContainerElement.resetContainerElement(elementContainer);
@@ -210,8 +214,23 @@ export default class FormTypeListeners {
                     if(MenuElement.tabType === 'break') {
                         BreakManager.onObjectBreak();
                     }
-                    FormManager.clearFormDataset();
+                }else{
+                    const nameTextbox = elementContainer.querySelector('.name-title');
+                    nameTextbox.classList.remove('error');
+                    if(errors.includes('name')) {
+                        nameTextbox.classList.add('error');
+                    }
+
+                    const timeTable = elementContainer.querySelector('.time-table');
+                    if(timeTable === null) {
+                        return
+                    }
+                    timeTable.classList.remove('error');
+                    if(errors.includes('time-table')) {
+                        timeTable.classList.add('error');
+                    }
                 }
+                
             })
         }
 

@@ -19,6 +19,7 @@
     --time-table-odd-row-color: rgb(235, 236, 250);
     --time-table-even-row-color: rgb(206, 201, 215);
 
+    --error: 3px solid red;
 }
 
 .header:has(.form){
@@ -109,5 +110,9 @@
 .footer:has(.form) .create.active {
     color: var(--form-btn-hover-text-color);
     background-color: var(--form-btn-hover-background-color);
+}
+
+.error {
+    border: var(--error)
 }
 
