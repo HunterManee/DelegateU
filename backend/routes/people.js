@@ -156,7 +156,7 @@ router.patch('/:personId', async(req,res)=>{
             };
             if(req.body.break === 'start') {
                 data['breakLength'] = req.body.breakLength;
-                await axios.post(`https://delegateubackend.azurewebsites.net?/breaks?groupId=${groupId}`,data);
+                await axios.post(`https://delegateubackend.azurewebsites.net/breaks?groupId=${groupId}`,data);
             }
             else if(req.body.break === 'incomplete') {
                 await axios.delete(`https://delegateubackend.azurewebsites.net/breaks/${data.personId}?groupId=${groupId}`)
