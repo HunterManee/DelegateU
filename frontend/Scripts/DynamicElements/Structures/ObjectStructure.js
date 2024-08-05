@@ -1,4 +1,3 @@
-import HolderElement from "../Elements/HolderElement.js";
 
 export default class ObjectStructure {
     static getObjectStructure(boolLeftBtn = true, boolRightBtn = true, dataset=undefined, strInfoKey = undefined, timeHeader = undefined) {

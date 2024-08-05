@@ -1,7 +1,5 @@
 import ApiManager from "./ApiManger.js"
-import BreakManager from "./BreakManager.js";
 import WebSocketManager from "../Managers/WebSocketManager.js";
-import FormElement from "../DynamicElements/Elements/FooterElement.js";
 
 
 export default class DataManager{
@@ -13,7 +11,7 @@ export default class DataManager{
             const people = await ApiManager._requestGetAll('people');
             const roles = await ApiManager._requestGetAll('roles');
             const breaks = await ApiManager._requestGetAll('breaks');
-            BreakManager.structureBreakCollection(breaks);
+
             this.#collections['positions'] = positions
             this.#collections['people'] = people;
             this.#collections['roles'] = roles;
@@ -130,6 +128,7 @@ export default class DataManager{
         if (index !== -1) {
             this.#collections[route].splice(index, 1);
         }
+        console.log(this.#collections[route]);
     }
 
     static async postLogin(body) {

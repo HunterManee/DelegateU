@@ -88,7 +88,6 @@ export default class ObjectElement extends HtmlElement {
                 elementObjectHeader.appendChild(newObjectInfo);
             }
 
-
             const btnsObject = newObject.querySelectorAll('.object-btns');
             if(structureObject['left-btn'] === true) {
                 const btnLeft = 
@@ -100,6 +99,8 @@ export default class ObjectElement extends HtmlElement {
                     this._elementFromHtml(ObjectHtml.getRightBtn());
                 btnsObject[1].appendChild(btnRight);
             }
+
+            return newObject;
         }
         static moveObject(object) {
             const currentBucketElement = object.parentNode;

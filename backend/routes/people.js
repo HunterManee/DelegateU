@@ -1,5 +1,6 @@
 const express = require('express');
-const ConnectionManager = require('../ConnectionManager');
+const axios = require('axios');
+const ConnectionManager = require('../managers/ConnectionManager');
 const router = express.Router();
 const schemaPerson = require('../models/Person');
 
@@ -149,10 +150,24 @@ router.patch('/:personId', async(req,res)=>{
             return;
         }
         ConnectionManager.broadcastRequestToGroup(groupId, updatedPerson, 'people', 'PATCH');
+        if(req.body.break !== undefined) {
+            data = {
+                "personId": updatedPerson._id
+            };
+            if(req.body.break === 'start') {
+                data['breakLength'] = req.body.breakLength;
+                await axios.post(`http://localhost:3000/breaks?groupId=${groupId}`,data);
+            }
+            else if(req.body.break === 'incomplete') {
+                await axios.delete(`http://localhost:3000/breaks/${data.personId}?groupId=${groupId}`)
+            }
+            
+        }
         res.json(updatedPerson);
     }catch(error){
         console.error('Error updating person:', error);
-        res.status(500).json({ message: error.message });    }
+        res.status(500).json({ message: error.message });    
+    }
 })
 
 

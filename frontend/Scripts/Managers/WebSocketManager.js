@@ -4,13 +4,14 @@ import DataManager from "./DataManager.js";
 import HolderElement from "../DynamicElements/Elements/HolderElement.js";
 import FormManager from "./FormManager.js";
 import MenuElement from "../DynamicElements/Elements/MenuElement.js";
+import BreakManager from "./BreakManager.js";
 
 export default class WebSocketManager {
     static ws = null;
   
     // Initialize the WebSocket connection
     static connect() {
-      this.ws = new WebSocket(`ws://localhost:3000`);
+      this.ws = new WebSocket(`wss://delegateubackend.azurewebsites.net`);
   
       this.ws.onopen = () => {
         console.log('WebSocket connection opened');
@@ -37,9 +38,12 @@ export default class WebSocketManager {
                     DataManager.deleteDatasetFromLocalCollection(requestInfo.route, data.message._id);
                     break;
             }
-            if(document.querySelector('.unassigned') !== null || MenuElement.tabType === 'break'){
+            if(document.querySelector('.focus') !== null){
               return;
-            }            
+            }
+            if(MenuElement.tabType === 'break'){
+              BreakManager.onPersonBreak();
+            }
             const elementBodyHolder = document.getElementById('body');
             HolderElement.mechanicHolder(elementBodyHolder);
         }

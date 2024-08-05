@@ -12,6 +12,10 @@ const BreakSchema = mongoose.Schema({
     end: {
         type: String,
         default: ''
+    },
+    completed: {
+        type: Boolean,
+        default: false
     }
 })
 

@@ -8,16 +8,13 @@ export default class ClockManager {
         this.updateDayFilterCurrent();
         this.updateMealFilterCurrent();
         BreakManager.updateBreakClock();
-        BreakManager.getBreakStatus();
         setInterval(this.intervalFunction, 1000);
-
     }
 
 
     static intervalFunction() {
         DateTimeManager.updateTodayDate();
         BreakManager.updateBreakClock();
-        BreakManager.getBreakStatus();
     }
 
     static updateDayFilterCurrent() {

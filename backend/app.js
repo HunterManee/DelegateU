@@ -3,7 +3,8 @@ const app = express();
 const http = require('http');
 const WebSocket = require('ws');
 const bcrypt = require('bcrypt');
-const ConnectionManager = require('./ConnectionManager');
+const ConnectionManager = require('./managers/ConnectionManager');
+const WorkerManager = require('./managers/WorkerManager');
 const schemaGroupLogin = require('./models/GroupLogin');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -20,6 +21,7 @@ const peopleRouter = require('./routes/people');
 const positionsRouter = require('./routes/positions');
 const roleRouter = require('./routes/roles');
 const breakRoute = require('./routes/breaks');
+
 app.use('/people', peopleRouter);
 app.use('/positions', positionsRouter);
 app.use('/roles', roleRouter);
@@ -122,7 +124,21 @@ wss.on('connection', (ws) => {
     });
 });
 
+const workerManager = new WorkerManager();
+const startBreakCheckPerson = () => {
+    const groupIds = Object.keys(ConnectionManager.ClientGroupConnection);
+    for(const groupId of groupIds) {
+        const task = {
+            message: "breakCollection",
+            groupId: groupId
+        }
+        workerManager.assignTask('breakWorker', task);
+    }
+}
 
+setInterval(() => {
+    startBreakCheckPerson();
+}, 1000); //1-minute interval
 
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);

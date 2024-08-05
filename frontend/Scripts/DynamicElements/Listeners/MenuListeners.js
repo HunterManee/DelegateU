@@ -21,6 +21,7 @@ export default class MenuListeners {
                 HtmlElement.addActiveToElement(elementTab);
             }
             elementTab.addEventListener('click', () => {
+                MenuElement.tabType = elementTab.value;
                 HtmlElement.unfocusContainer();
                 for(const element of elementPageTabs) {
                     HtmlElement.removeActiveFromElement(element);
@@ -30,10 +31,10 @@ export default class MenuListeners {
                         HtmlElement.clearStylesFromContainer(elementHolder);
                 }
                 HtmlElement.addActiveToElement(elementTab);
-                MenuElement.tabType = elementTab.value;
                 if(elementTab.value === 'upload') {
                     const elementContainer = elementHolder.querySelector('.container');
                     HtmlElement.focusContainer(elementContainer);
+                    return;
                 }
                 HolderElement.clearHolder(elementHolder);
                 ContainerElement.appendContainer(elementHolder, 'menu');
@@ -43,16 +44,12 @@ export default class MenuListeners {
                     ClockManager.updateMealFilterCurrent();
                 }
 
-                if(elementTab.value === 'upload') {
-                    return;
+                if(elementTab.value === 'break') {
+                    BreakManager.onPersonBreak();
                 }
                 
                 const elementBodyHolder = document.getElementById('body');
                 HolderElement.mechanicHolder(elementBodyHolder);
-
-                if(elementTab.value === 'break') {
-                    BreakManager.onObjectBreak();
-                }
             })
         }
     }

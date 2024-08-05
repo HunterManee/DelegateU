@@ -1,11 +1,11 @@
 const WebSocket = require('ws');
 
 class ConnectionManger {
-    static #ClientGroupConnection = {};
+    static ClientGroupConnection = {};
     static #GroupLoginData = {};
 
     static addClientGroupConnection(groupId, clusterConnection) {
-        this.#ClientGroupConnection[groupId] = {
+        this.ClientGroupConnection[groupId] = {
             'connection': clusterConnection,
             'clients': new Array()
         }
@@ -19,7 +19,7 @@ class ConnectionManger {
     }
 
     static getClientGroupConnection(groupId) {
-        return this.#ClientGroupConnection[groupId];
+        return this.ClientGroupConnection[groupId];
     }
 
     static getGroupLoginData(username) {
@@ -27,8 +27,8 @@ class ConnectionManger {
     }
 
     static addClientToGroup(groupId, ws) {
-        if (this.#ClientGroupConnection[groupId]) {
-            this.#ClientGroupConnection[groupId].clients.push(ws);
+        if (this.ClientGroupConnection[groupId]) {
+            this.ClientGroupConnection[groupId].clients.push(ws);
             ws.on('close', () => this.removeClientFromGroup(groupId, ws));
             ws.on('error', () => this.removeClientFromGroup(groupId, ws));
         } else {
@@ -37,15 +37,15 @@ class ConnectionManger {
     }
 
     static removeClientFromGroup(groupId, ws) {
-        if (this.#ClientGroupConnection[groupId]) {
-            this.#ClientGroupConnection[groupId].clients = this.#ClientGroupConnection[groupId].clients.filter(client => client !== ws);
+        if (this.ClientGroupConnection[groupId]) {
+            this.ClientGroupConnection[groupId].clients = this.ClientGroupConnection[groupId].clients.filter(client => client !== ws);
         }
     }
 
     static broadcastRequestToGroup(groupId, message, route, requestType) {
         const requestInfo = {requestType, route}
-        if (this.#ClientGroupConnection[groupId]) {
-            this.#ClientGroupConnection[groupId].clients.forEach(client => {
+        if (this.ClientGroupConnection[groupId]) {
+            this.ClientGroupConnection[groupId].clients.forEach(client => {
                 if (client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify({ requestInfo, message })); // Send as JSON
                 }

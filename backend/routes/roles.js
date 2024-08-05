@@ -1,5 +1,5 @@
 const express = require('express');
-const ConnectionManager = require('../ConnectionManager');
+const ConnectionManager = require('../managers/ConnectionManager');
 const router = express.Router();
 const schemaRole = require('../models/Roles');
 

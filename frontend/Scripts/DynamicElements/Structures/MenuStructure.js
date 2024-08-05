@@ -76,7 +76,6 @@ export default class MenuStructure {
                 'name-label': strName
             
         }
-
         return structureHeader 
     }
 

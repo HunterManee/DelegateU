@@ -1,3 +1,4 @@
+import BreakManager from "../../Managers/BreakManager.js";
 import DataManager from "../../Managers/DataManager.js";
 import HeaderHtml from "../Html/Container/HeaderHtml.js";
 import MenuHtml from "../Html/Menu/MenuHtml.js";
@@ -18,12 +19,15 @@ export default class MenuElement extends HtmlElement{
     static mechanicMenu(elementHeader, structureHeader) {
         switch(structureHeader.type) {
             case 'new':
-            case 'break':
             case 'route':
                 this.#mechanicNameLabel(elementHeader, structureHeader);
-                return; 
+                return;
+            case 'break':
+                this.#mechanicNameLabel(elementHeader, structureHeader);
+                return;
             case 'filter':
-                this.#mechanicFilter(elementHeader, structureHeader);
+                this.#mechanicNameLabel(elementHeader, structureHeader);
+                this.#mechanicFilter(elementHeader);
                 return;
         }
     }
@@ -36,12 +40,8 @@ export default class MenuElement extends HtmlElement{
             elementTitle.appendChild(newNameLabel);
         }
     }
-    static #mechanicFilter(elementHeader, structureHeader) {
+    static #mechanicFilter(elementHeader) {
         const elementType = elementHeader.querySelector('.filter');
-        const innerText = structureHeader['name-label'];
-        const newNameLabel =
-            this._elementFromHtml(HeaderHtml.getNameLabel(innerText));
-        elementType.appendChild(newNameLabel);
         //Day
         const newDayFilter =
         this._elementFromHtml(MenuHtml.getFilterType('day'));
