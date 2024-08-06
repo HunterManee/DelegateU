@@ -116,6 +116,10 @@ export default class BreakManager {
         const personBody = {};
         const day = HolderElement.dayFilter;
         personBody[`${day}BreakStatus`] = 'Needs';
+        const breakCollection = DataManager.getLocalCollection('breaks');
+        const completedBreaks = breakCollection.filter(_break => _break.completed === true);
+        const personBreaks = breakCollection.filter(_break => _break.personId === objectId);
+        if(personBreaks.length > 0) {personBody[`${day}BreakStatus`] = 'Had'}
         personBody[`break`] = 'incomplete';
         try {
             await DataManager.patchLocalData('people', objectId, personBody);
