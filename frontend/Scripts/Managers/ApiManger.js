@@ -1,11 +1,9 @@
-require('dotenv').config();
 
 export default class ApiManager {
-    static serverURL = process.env.HTTPS || 'http://localhost:3000'
     static idDiningGroup = undefined;
 
     static async _requestGetAll(route) {
-        return fetch(`${this.serverURL}/${route}?groupId=${this.idDiningGroup}`)
+        return fetch(`https://delegateubackend.azurewebsites.net/${route}?groupId=${this.idDiningGroup}`)
                 .then(result => {
                     if(!result.ok){
                         throw new Error('Network response was not ok')
@@ -22,7 +20,7 @@ export default class ApiManager {
     }
     
     static async _requestPost(route, newData) {
-        return fetch(`${this.serverURL}/${route}?groupId=${this.idDiningGroup}`, {
+        return fetch(`https://delegateubackend.azurewebsites.net/${route}?groupId=${this.idDiningGroup}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -46,7 +44,7 @@ export default class ApiManager {
     }
 
     static async _requestGetById(route, dataId) {
-        return fetch(`${this.serverURL}/${route}/${dataId}?groupId=${this.idDiningGroup}`)
+        return fetch(`https://delegateubackend.azurewebsites.net/${route}/${dataId}?groupId=${this.idDiningGroup}`)
         .then(result => result.json())
         .then(data => {
             return data;
@@ -57,7 +55,7 @@ export default class ApiManager {
     }
 
     static async _requestPatch(route, dataId, newData) {
-        return fetch(`${this.serverURL}/${route}/${dataId}?groupId=${this.idDiningGroup}`, {
+        return fetch(`https://delegateubackend.azurewebsites.net/${route}/${dataId}?groupId=${this.idDiningGroup}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -80,7 +78,7 @@ export default class ApiManager {
         })
     }
     static async _requestDelete(route, dataId) {
-        return fetch(`${this.serverURL}/${route}/${dataId}?groupId=${this.idDiningGroup}`, {
+        return fetch(`https://delegateubackend.azurewebsites.net/${route}/${dataId}?groupId=${this.idDiningGroup}`, {
             method: 'Delete'
         })
         .then(result => {
@@ -100,7 +98,7 @@ export default class ApiManager {
     }
 
     static async _requestLogIn(newData) {
-        return fetch(`${this.serverURL}/`, {
+        return fetch(`https://delegateubackend.azurewebsites.net/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -1,9 +1,6 @@
 const WebSocket = require('ws');
-require('dotenv').config();
 
 class ConnectionManger {
-    static serverURL = process.env.HTTPS || 'http://localhost:3000';
-
     static ClientGroupConnection = {};
     static #GroupLoginData = {};
 
