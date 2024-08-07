@@ -1,5 +1,6 @@
 const { Worker } = require('worker_threads');
 const axios = require('axios');
+const ConnectionManger = require('./ConnectionManager');
 const axiosRetry = require('axios-retry').default;
 
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
@@ -35,7 +36,7 @@ class WorkerManager {
 
     async handleBreakCollection(worker, data) {
         try {
-            const breakCollection = await axios.get(`https://delegateubackend.azurewebsites.net/breaks?groupId=${data.groupId}`);
+            const breakCollection = await axios.get(`${ConnectionManger.serverURL}/breaks?groupId=${data.groupId}`);
             worker.postMessage({
                 message: "CheckBreakCollection",
                 groupId: data.groupId,
@@ -49,7 +50,7 @@ class WorkerManager {
     async handleBreakCompleted(worker, data) {
         try {
             const body = { completed: true };
-            await axios.patch(`https://delegateubackend.azurewebsites.net/breaks/${data.breakId}?groupId=${data.groupId}`, body);
+            await axios.patch(`${ConnectionManger.serverURL}/breaks/${data.breakId}?groupId=${data.groupId}`, body);
             worker.postMessage({
                 message: "NotifyOfBreakCompletion",
                 personId: data.personId,
@@ -65,7 +66,7 @@ class WorkerManager {
         try {
             const body = {};
             body[`${data.day}BreakStatus`] = 'Had';
-            await axios.patch(`https://delegateubackend.azurewebsites.net/people/${data.personId}?groupId=${data.groupId}`, body);
+            await axios.patch(`${ConnectionManger.serverURL}/people/${data.personId}?groupId=${data.groupId}`, body);
         } catch (error) {
             console.error('Error notifying person of break completion:', error);
         }
