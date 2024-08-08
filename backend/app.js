@@ -17,55 +17,17 @@ app.use(cors());
 app.use(bodyParser.json());
 
 //Import Routes
+const rootRouter = require('./routes/root');
 const peopleRouter = require('./routes/people');
 const positionsRouter = require('./routes/positions');
 const roleRouter = require('./routes/roles');
 const breakRoute = require('./routes/breaks');
 
+app.use('/', rootRouter);
 app.use('/people', peopleRouter);
 app.use('/positions', positionsRouter);
 app.use('/roles', roleRouter);
 app.use('/breaks', breakRoute);
-
-
-//ROUTES
-app.get('/', (req, res) => {
-    res.send('We are home')
-})
-
-app.get('/health', (req, res) => {
-    res.status(200).send('OK');
-});
-
-
-app.post('/', async (req,res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-
-    const groupLoginData = ConnectionManager.getGroupLoginData(username);
-    if(groupLoginData === undefined) {
-        const data = {'Status': false}
-        res.json(data);
-        return;
-    }
-    const hashedPassword = groupLoginData.hashedPassword;
-    bcrypt.compare(password, hashedPassword, (err, isMatch) => {
-        if(err) throw err;
-        if(isMatch) {
-            const groupId = groupLoginData.groupId;
-            const data = {
-                'Status': true,
-                'groupId': groupId
-            }
-            res.json(data);
-            return;
-        }else {
-            const data = {'Status': false}
-            res.json(data);
-            return; 
-        }
-    })
-});
 
 async function getLoginInfo() {
     try{
@@ -77,7 +39,8 @@ async function getLoginInfo() {
             const groupId = JSON.stringify(login._id).split('"')[1];
             const connection = login.connection;
             const clusterConnection = mongoose.createConnection(connection);
-            ConnectionManager.addClientGroupConnection(groupId, clusterConnection);
+            const phoneNumber = login.phoneNumber;
+            ConnectionManager.addClientGroupConnection(groupId, clusterConnection, phoneNumber);
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(login.password, salt);
             ConnectionManager.addGroupLoginData(login.username, groupId, hashedPassword);

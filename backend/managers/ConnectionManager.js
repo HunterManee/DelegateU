@@ -4,10 +4,11 @@ class ConnectionManger {
     static ClientGroupConnection = {};
     static #GroupLoginData = {};
 
-    static addClientGroupConnection(groupId, clusterConnection) {
+    static addClientGroupConnection(groupId, clusterConnection, phoneNumber = '') {
         this.ClientGroupConnection[groupId] = {
+            'phoneNumber': phoneNumber,            
             'connection': clusterConnection,
-            'clients': new Array()
+            'clients': new Array(),
         }
     }
 
@@ -42,8 +43,11 @@ class ConnectionManger {
         }
     }
 
-    static broadcastRequestToGroup(groupId, message, route, requestType) {
-        const requestInfo = {requestType, route}
+    static broadcastRequestToGroup(groupId, message, route = undefined, requestType = undefined) {
+        let requestInfo = undefined;
+        if(route !== undefined && requestType !== undefined) {
+            requestInfo = {requestType, route};
+        }
         if (this.ClientGroupConnection[groupId]) {
             this.ClientGroupConnection[groupId].clients.forEach(client => {
                 if (client.readyState === WebSocket.OPEN) {

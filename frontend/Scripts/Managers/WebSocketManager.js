@@ -47,7 +47,9 @@ export default class WebSocketManager {
             }
             const elementBodyHolder = document.getElementById('body');
             HolderElement.mechanicHolder(elementBodyHolder);
+            return;
         }
+        console.log(data.message);
         // Handle incoming messages based on message content
         // For example, update UI or process data
       };

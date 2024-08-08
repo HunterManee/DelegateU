@@ -12,6 +12,10 @@ const GroupLoginSchema = mongoose.Schema({
     connection: {
         type: String,
         required: true
+    },
+    phoneNumber: {
+        type: String,
+        default: ''
     }
 })
 
