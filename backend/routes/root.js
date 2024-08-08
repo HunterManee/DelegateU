@@ -50,9 +50,9 @@ router.post('/receive-message', (req, res) => {
     const message = req.body.Body;
     const fromNumber = req.body.From;
     const toNumber = req.body.To;
-
     const groupIds = Object.keys(ConnectionManger.ClientGroupConnection);
     for(const groupId of groupIds) {
+        ConnectionManger.broadcastRequestToGroup(groupId, fromNumber);
         const phoneNumber = ConnectionManger.ClientGroupConnection[groupId].phoneNumbe;
         if(toNumber !== phoneNumber) {continue;}
         const broadcast = `${fromNumber}: ${message}`;
