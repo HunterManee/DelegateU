@@ -1,6 +1,6 @@
 
 export default class ApiManager {
-    static idDiningGroup = undefined;
+    static idDiningGroup = sessionStorage.getItem('groupId');
 
     static async _requestGetAll(route) {
         return fetch(`https://delegateubackend.azurewebsites.net/${route}?groupId=${this.idDiningGroup}`)
@@ -117,6 +117,7 @@ export default class ApiManager {
             console.log('Success');
             if(data.Status === true) {
                 this.idDiningGroup = data.groupId;
+                sessionStorage.setItem('groupId', this.idDiningGroup);
             }
             return data;
         })

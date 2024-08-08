@@ -1,14 +1,14 @@
-import HolderElement from '../DynamicElements/Elements/HolderElement.js';
 import BreakManager from './BreakManager.js';
 import DateTimeManager from './DateTimeManger.js';
-import DataManager from './DateTimeManger.js';
 
-export default class ClockManager {    
+export default class ClockManager { 
+    static intervalId;
+    
     static startClock() {
         this.updateDayFilterCurrent();
         this.updateMealFilterCurrent();
         BreakManager.updateBreakClock();
-        setInterval(this.intervalFunction, 1000);
+        intervalId = setInterval(this.intervalFunction, 1000);
     }
 
 

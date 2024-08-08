@@ -5,6 +5,7 @@ import HolderElement from "../DynamicElements/Elements/HolderElement.js";
 import FormManager from "./FormManager.js";
 import MenuElement from "../DynamicElements/Elements/MenuElement.js";
 import BreakManager from "./BreakManager.js";
+import ClockManager from "./ClockManager.js";
 
 export default class WebSocketManager {
     static ws = null;
@@ -54,6 +55,7 @@ export default class WebSocketManager {
       this.ws.onclose = (event) => {
         console.log('WebSocket connection closed:', event.reason);
         // Handle the connection closing
+        clearInterval(ClockManager.intervalId);
         LoginElement.mechanicLogin();
       };
   
