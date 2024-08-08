@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const twilio = require('twilio');
 const bcrypt = require('bcrypt');
-const ConnectionManger = require('../managers/ConnectionManager');
+const ConnectionManager = require('../managers/ConnectionManager');
 
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
