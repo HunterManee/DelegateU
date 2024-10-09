@@ -1,6 +1,6 @@
 This was my first major web development adventure.
 All HTTPS, WSS and Databases have been deactivated
-\n
+
 FrontEnd:
   -Intracts with backend to gain information from Mongodb Server
   -Create Elments on the fly to be displayed to the user
